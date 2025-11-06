@@ -1,0 +1,58 @@
+{
+  "header": {
+    "open": "Abrir",
+    "save": "Salvar"
+  },
+  "canvas": {
+    "stage": "Palco",
+    "addItem": "Adicionar Item",
+    "exportRider": "Exportar Rider",
+    "emptyTitle": "Arraste itens da biblioteca",
+    "emptyDescription": "ou clique em + Adicionar Item para começar a construir seu mapa de palco"
+  },
+  "iconLibrary": {
+    "title": "Biblioteca de Ícones",
+    "search": "Buscar ícones...",
+    "categories": {
+      "drums": "Bateria",
+      "guitars": "Guitarras",
+      "mics": "Microfones",
+      "monitors": "Monitores",
+      "keys": "Teclados"
+    },
+    "items": {
+      "kick": "Bumbo",
+      "snare": "Caixa",
+      "hihat": "Chimbal",
+      "tom": "Tom",
+      "electricGuitar": "Guitarra Elétrica",
+      "acousticGuitar": "Violão",
+      "bass": "Baixo",
+      "amp": "Amplificador",
+      "vocalMic": "Microfone Vocal",
+      "instrumentMic": "Microfone de Instrumento",
+      "condenser": "Condensador",
+      "wedge": "Monitor Cunh",
+      "iem": "Monitor In-Ear",
+      "sidefill": "Side Fill",
+      "keyboard": "Teclado",
+      "piano": "Piano",
+      "synth": "Sintetizador"
+    }
+  },
+  "inputList": {
+    "title": "Lista de Entradas",
+    "channels": "{{count}} canal",
+    "channels_other": "{{count}} canais",
+    "empty": "Adicione itens ao seu mapa de palco para gerar canais de entrada automaticamente",
+    "tableHeaders": {
+      "channel": "Ch",
+      "instrument": "Instrumento",
+      "source": "Fonte",
+      "phantom": "+48V"
+    }
+  },
+  "common": {
+    "newProject": "Novo Mapa de Palco"
+  }
+}

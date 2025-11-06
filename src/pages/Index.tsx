@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ProjectHeader } from "@/components/ProjectHeader";
 import { StageCanvas } from "@/components/StageCanvas";
 import { IconLibrary } from "@/components/IconLibrary";
@@ -7,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { FileDown, Plus } from "lucide-react";
 
 const Index = () => {
-  const [projectName, setProjectName] = useState("New Stage Plot");
+  const { t } = useTranslation();
+  const [projectName, setProjectName] = useState(t("common.newProject"));
   const [stageItems, setStageItems] = useState<any[]>([]);
 
   return (
@@ -29,12 +31,12 @@ const Index = () => {
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm">
                 <Plus className="w-4 h-4 mr-1" />
-                Add Item
+                {t("canvas.addItem")}
               </Button>
             </div>
             <Button size="sm" className="bg-gradient-accent">
               <FileDown className="w-4 h-4 mr-1" />
-              Export Rider
+              {t("canvas.exportRider")}
             </Button>
           </div>
           

@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Music, Save, FolderOpen } from "lucide-react";
 
 interface ProjectHeaderProps {
@@ -9,6 +11,7 @@ interface ProjectHeaderProps {
 }
 
 export const ProjectHeader = ({ projectName, onProjectNameChange }: ProjectHeaderProps) => {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -40,12 +43,13 @@ export const ProjectHeader = ({ projectName, onProjectNameChange }: ProjectHeade
       <div className="flex items-center gap-2">
         <Button variant="outline" size="sm">
           <FolderOpen className="w-4 h-4 mr-1" />
-          Open
+          {t("header.open")}
         </Button>
         <Button variant="outline" size="sm">
           <Save className="w-4 h-4 mr-1" />
-          Save
+          {t("header.save")}
         </Button>
+        <LanguageSwitcher />
       </div>
     </header>
   );

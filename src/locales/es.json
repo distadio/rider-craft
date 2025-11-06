@@ -1,0 +1,58 @@
+{
+  "header": {
+    "open": "Abrir",
+    "save": "Guardar"
+  },
+  "canvas": {
+    "stage": "Escenario",
+    "addItem": "Añadir Elemento",
+    "exportRider": "Exportar Rider",
+    "emptyTitle": "Arrastra elementos desde la biblioteca",
+    "emptyDescription": "o haz clic en + Añadir Elemento para comenzar a construir tu plano de escenario"
+  },
+  "iconLibrary": {
+    "title": "Biblioteca de Íconos",
+    "search": "Buscar íconos...",
+    "categories": {
+      "drums": "Batería",
+      "guitars": "Guitarras",
+      "mics": "Micrófonos",
+      "monitors": "Monitores",
+      "keys": "Teclados"
+    },
+    "items": {
+      "kick": "Bombo",
+      "snare": "Caja",
+      "hihat": "Hi-Hat",
+      "tom": "Tom",
+      "electricGuitar": "Guitarra Eléctrica",
+      "acousticGuitar": "Guitarra Acústica",
+      "bass": "Bajo",
+      "amp": "Amplificador",
+      "vocalMic": "Micrófono Vocal",
+      "instrumentMic": "Micrófono de Instrumento",
+      "condenser": "Condensador",
+      "wedge": "Monitor de Cuña",
+      "iem": "Monitor In-Ear",
+      "sidefill": "Side Fill",
+      "keyboard": "Teclado",
+      "piano": "Piano",
+      "synth": "Sintetizador"
+    }
+  },
+  "inputList": {
+    "title": "Lista de Entradas",
+    "channels": "{{count}} canal",
+    "channels_other": "{{count}} canales",
+    "empty": "Añade elementos a tu plano de escenario para generar canales de entrada automáticamente",
+    "tableHeaders": {
+      "channel": "Ch",
+      "instrument": "Instrumento",
+      "source": "Fuente",
+      "phantom": "+48V"
+    }
+  },
+  "common": {
+    "newProject": "Nuevo Plano de Escenario"
+  }
+}

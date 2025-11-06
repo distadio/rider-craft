@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Drum, Guitar, Mic, Speaker, Music } from "lucide-react";
@@ -9,35 +10,36 @@ interface IconLibraryProps {
 
 const iconCategories = {
   drums: [
-    { id: "kick", label: "Kick Drum", icon: "🥁" },
-    { id: "snare", label: "Snare", icon: "🥁" },
-    { id: "hihat", label: "Hi-Hat", icon: "🥁" },
-    { id: "tom", label: "Tom", icon: "🥁" },
+    { id: "kick", translationKey: "kick", icon: "🥁" },
+    { id: "snare", translationKey: "snare", icon: "🥁" },
+    { id: "hihat", translationKey: "hihat", icon: "🥁" },
+    { id: "tom", translationKey: "tom", icon: "🥁" },
   ],
   guitars: [
-    { id: "electric-guitar", label: "Electric Guitar", icon: "🎸" },
-    { id: "acoustic-guitar", label: "Acoustic Guitar", icon: "🎸" },
-    { id: "bass", label: "Bass Guitar", icon: "🎸" },
-    { id: "amp", label: "Amp", icon: "📻" },
+    { id: "electric-guitar", translationKey: "electricGuitar", icon: "🎸" },
+    { id: "acoustic-guitar", translationKey: "acousticGuitar", icon: "🎸" },
+    { id: "bass", translationKey: "bass", icon: "🎸" },
+    { id: "amp", translationKey: "amp", icon: "📻" },
   ],
   mics: [
-    { id: "vocal-mic", label: "Vocal Mic", icon: "🎤" },
-    { id: "instrument-mic", label: "Instrument Mic", icon: "🎤" },
-    { id: "condenser", label: "Condenser", icon: "🎤" },
+    { id: "vocal-mic", translationKey: "vocalMic", icon: "🎤" },
+    { id: "instrument-mic", translationKey: "instrumentMic", icon: "🎤" },
+    { id: "condenser", translationKey: "condenser", icon: "🎤" },
   ],
   monitors: [
-    { id: "wedge", label: "Wedge Monitor", icon: "🔊" },
-    { id: "iem", label: "In-Ear Monitor", icon: "🎧" },
-    { id: "sidefill", label: "Side Fill", icon: "🔊" },
+    { id: "wedge", translationKey: "wedge", icon: "🔊" },
+    { id: "iem", translationKey: "iem", icon: "🎧" },
+    { id: "sidefill", translationKey: "sidefill", icon: "🔊" },
   ],
   keys: [
-    { id: "keyboard", label: "Keyboard", icon: "🎹" },
-    { id: "piano", label: "Piano", icon: "🎹" },
-    { id: "synth", label: "Synthesizer", icon: "🎹" },
+    { id: "keyboard", translationKey: "keyboard", icon: "🎹" },
+    { id: "piano", translationKey: "piano", icon: "🎹" },
+    { id: "synth", translationKey: "synth", icon: "🎹" },
   ],
 };
 
 export const IconLibrary = ({ onDragStart }: IconLibraryProps) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
@@ -45,12 +47,12 @@ export const IconLibrary = ({ onDragStart }: IconLibraryProps) => {
       <div className="p-4 border-b border-border">
         <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
           <Music className="w-4 h-4" />
-          Icon Library
+          {t("iconLibrary.title")}
         </h2>
         <div className="relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search icons..."
+            placeholder={t("iconLibrary.search")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-8 h-8"
@@ -81,19 +83,20 @@ export const IconLibrary = ({ onDragStart }: IconLibraryProps) => {
           <TabsContent key={category} value={category} className="flex-1 overflow-auto p-3 mt-0">
             <div className="grid grid-cols-2 gap-2">
               {items
-                .filter((item) => 
-                  searchQuery === "" || 
-                  item.label.toLowerCase().includes(searchQuery.toLowerCase())
-                )
+                .filter((item) => {
+                  const translatedLabel = t(`iconLibrary.items.${item.translationKey}`);
+                  return searchQuery === "" || 
+                    translatedLabel.toLowerCase().includes(searchQuery.toLowerCase());
+                })
                 .map((item) => (
                   <button
                     key={item.id}
                     className="p-3 rounded-md border border-border bg-card hover:border-accent hover:bg-accent/5 transition-all flex flex-col items-center gap-2 cursor-grab active:cursor-grabbing"
                     draggable
-                    onDragStart={() => onDragStart(item)}
+                    onDragStart={() => onDragStart({ ...item, label: t(`iconLibrary.items.${item.translationKey}`) })}
                   >
                     <span className="text-2xl">{item.icon}</span>
-                    <span className="text-xs text-center">{item.label}</span>
+                    <span className="text-xs text-center">{t(`iconLibrary.items.${item.translationKey}`)}</span>
                   </button>
                 ))}
             </div>

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
 
@@ -8,6 +9,7 @@ interface StageCanvasProps {
 }
 
 export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(100);
   const [draggedItem, setDraggedItem] = useState<any>(null);
@@ -40,7 +42,7 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
       {/* Canvas Controls */}
       <div className="flex items-center justify-between px-4 py-2 bg-card border-b border-border">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Stage: 40ft × 30ft</span>
+          <span className="text-sm text-muted-foreground">{t("canvas.stage")}: 40ft × 30ft</span>
         </div>
         <div className="flex items-center gap-2">
           <Button 
@@ -101,8 +103,8 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
             {items.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-muted-foreground">
-                  <p className="text-lg font-medium mb-2">Drag items from the library</p>
-                  <p className="text-sm">or click + Add Item to start building your stage plot</p>
+                  <p className="text-lg font-medium mb-2">{t("canvas.emptyTitle")}</p>
+                  <p className="text-sm">{t("canvas.emptyDescription")}</p>
                 </div>
               </div>
             )}

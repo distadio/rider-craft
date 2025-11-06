@@ -1,0 +1,58 @@
+{
+  "header": {
+    "open": "Open",
+    "save": "Save"
+  },
+  "canvas": {
+    "stage": "Stage",
+    "addItem": "Add Item",
+    "exportRider": "Export Rider",
+    "emptyTitle": "Drag items from the library",
+    "emptyDescription": "or click + Add Item to start building your stage plot"
+  },
+  "iconLibrary": {
+    "title": "Icon Library",
+    "search": "Search icons...",
+    "categories": {
+      "drums": "Drums",
+      "guitars": "Guitars",
+      "mics": "Microphones",
+      "monitors": "Monitors",
+      "keys": "Keys"
+    },
+    "items": {
+      "kick": "Kick Drum",
+      "snare": "Snare",
+      "hihat": "Hi-Hat",
+      "tom": "Tom",
+      "electricGuitar": "Electric Guitar",
+      "acousticGuitar": "Acoustic Guitar",
+      "bass": "Bass Guitar",
+      "amp": "Amp",
+      "vocalMic": "Vocal Mic",
+      "instrumentMic": "Instrument Mic",
+      "condenser": "Condenser",
+      "wedge": "Wedge Monitor",
+      "iem": "In-Ear Monitor",
+      "sidefill": "Side Fill",
+      "keyboard": "Keyboard",
+      "piano": "Piano",
+      "synth": "Synthesizer"
+    }
+  },
+  "inputList": {
+    "title": "Input List",
+    "channels": "{{count}} channel",
+    "channels_other": "{{count}} channels",
+    "empty": "Add items to your stage plot to generate input channels automatically",
+    "tableHeaders": {
+      "channel": "Ch",
+      "instrument": "Instrument",
+      "source": "Source",
+      "phantom": "+48V"
+    }
+  },
+  "common": {
+    "newProject": "New Stage Plot"
+  }
+}

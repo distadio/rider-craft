@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,8 @@ const suggestMic = (instrumentType: string) => {
 };
 
 export const InputList = ({ items }: InputListProps) => {
+  const { t } = useTranslation();
+  
   const inputChannels = items.map((item, index) => ({
     channel: index + 1,
     instrument: item.label,
@@ -35,26 +38,26 @@ export const InputList = ({ items }: InputListProps) => {
       <div className="p-4 border-b border-border">
         <h2 className="text-sm font-semibold flex items-center gap-2">
           <List className="w-4 h-4" />
-          Input List
+          {t("inputList.title")}
         </h2>
         <p className="text-xs text-muted-foreground mt-1">
-          {inputChannels.length} channel{inputChannels.length !== 1 ? "s" : ""}
+          {t("inputList.channels", { count: inputChannels.length })}
         </p>
       </div>
 
       <div className="flex-1 overflow-auto">
         {inputChannels.length === 0 ? (
           <div className="flex items-center justify-center h-full text-muted-foreground text-sm text-center px-4">
-            Add items to your stage plot to generate input channels automatically
+            {t("inputList.empty")}
           </div>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-16">Ch</TableHead>
-                <TableHead>Instrument</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead className="w-16">+48V</TableHead>
+                <TableHead className="w-16">{t("inputList.tableHeaders.channel")}</TableHead>
+                <TableHead>{t("inputList.tableHeaders.instrument")}</TableHead>
+                <TableHead>{t("inputList.tableHeaders.source")}</TableHead>
+                <TableHead className="w-16">{t("inputList.tableHeaders.phantom")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
