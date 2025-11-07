@@ -8,7 +8,8 @@
     "addItem": "Add Item",
     "exportRider": "Export Rider",
     "emptyTitle": "Drag items from the library",
-    "emptyDescription": "or click + Add Item to start building your stage plot"
+    "emptyDescription": "or click + Add Item to start building your stage plot",
+    "deleteHint": "Press Delete to remove selected item"
   },
   "iconLibrary": {
     "title": "Icon Library",

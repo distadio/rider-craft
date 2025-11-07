@@ -113,10 +113,14 @@ export const IconLibrary = ({ onDragStart }: IconLibraryProps) => {
                     key={item.id}
                     className="p-3 rounded-md border border-border bg-card hover:border-accent hover:bg-accent/5 transition-all flex flex-col items-center gap-2 cursor-grab active:cursor-grabbing"
                     draggable
-                    onDragStart={() => onDragStart({ 
-                      ...item, 
-                      label: item.isCustom ? item.translationKey : t(`iconLibrary.items.${item.translationKey}`) 
-                    })}
+                    onDragStart={(e) => {
+                      const dragData = { 
+                        ...item, 
+                        label: item.isCustom ? item.translationKey : t(`iconLibrary.items.${item.translationKey}`) 
+                      };
+                      e.dataTransfer.setData("application/json", JSON.stringify(dragData));
+                      onDragStart(dragData);
+                    }}
                   >
                     {item.isCustom ? (
                       item.icon.startsWith('data:image') ? (

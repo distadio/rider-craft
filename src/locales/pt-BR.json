@@ -8,7 +8,8 @@
     "addItem": "Adicionar Item",
     "exportRider": "Exportar Rider",
     "emptyTitle": "Arraste itens da biblioteca",
-    "emptyDescription": "ou clique em + Adicionar Item para começar a construir seu mapa de palco"
+    "emptyDescription": "ou clique em + Adicionar Item para começar a construir seu mapa de palco",
+    "deleteHint": "Pressione Delete para remover item selecionado"
   },
   "iconLibrary": {
     "title": "Biblioteca de Ícones",

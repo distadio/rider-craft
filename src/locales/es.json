@@ -8,7 +8,8 @@
     "addItem": "Añadir Elemento",
     "exportRider": "Exportar Rider",
     "emptyTitle": "Arrastra elementos desde la biblioteca",
-    "emptyDescription": "o haz clic en + Añadir Elemento para comenzar a construir tu plano de escenario"
+    "emptyDescription": "o haz clic en + Añadir Elemento para comenzar a construir tu plano de escenario",
+    "deleteHint": "Presiona Delete para eliminar elemento seleccionado"
   },
   "iconLibrary": {
     "title": "Biblioteca de Íconos",
