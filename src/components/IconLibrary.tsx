@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Drum, Guitar, Mic, Speaker, Music } from "lucide-react";
+import { useStore } from "@/store/store";
 
 interface IconLibraryProps {
   onDragStart: (item: any) => void;
@@ -41,6 +42,18 @@ const iconCategories = {
 export const IconLibrary = ({ onDragStart }: IconLibraryProps) => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
+  const customIcons = useStore(state => state.customIcons);
+
+  // Merge default icons with custom icons
+  const allIconCategories = {
+    ...iconCategories,
+    custom: customIcons.map(icon => ({
+      id: icon.id,
+      translationKey: icon.name,
+      icon: icon.svgData,
+      isCustom: true
+    }))
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -61,7 +74,7 @@ export const IconLibrary = ({ onDragStart }: IconLibraryProps) => {
       </div>
 
       <Tabs defaultValue="drums" className="flex-1 flex flex-col">
-        <TabsList className="w-full grid grid-cols-5 rounded-none border-b border-border bg-transparent h-auto p-0">
+        <TabsList className="w-full grid grid-cols-6 rounded-none border-b border-border bg-transparent h-auto p-0">
           <TabsTrigger value="drums" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accent">
             <Drum className="w-4 h-4" />
           </TabsTrigger>
@@ -77,26 +90,53 @@ export const IconLibrary = ({ onDragStart }: IconLibraryProps) => {
           <TabsTrigger value="keys" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accent">
             <Music className="w-4 h-4" />
           </TabsTrigger>
+          {customIcons.length > 0 && (
+            <TabsTrigger value="custom" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accent">
+              ⭐
+            </TabsTrigger>
+          )}
         </TabsList>
 
-        {Object.entries(iconCategories).map(([category, items]) => (
+        {Object.entries(allIconCategories).map(([category, items]) => (
           <TabsContent key={category} value={category} className="flex-1 overflow-auto p-3 mt-0">
             <div className="grid grid-cols-2 gap-2">
               {items
-                .filter((item) => {
-                  const translatedLabel = t(`iconLibrary.items.${item.translationKey}`);
+                .filter((item: any) => {
+                  const translatedLabel = item.isCustom 
+                    ? item.translationKey 
+                    : t(`iconLibrary.items.${item.translationKey}`);
                   return searchQuery === "" || 
                     translatedLabel.toLowerCase().includes(searchQuery.toLowerCase());
                 })
-                .map((item) => (
+                .map((item: any) => (
                   <button
                     key={item.id}
                     className="p-3 rounded-md border border-border bg-card hover:border-accent hover:bg-accent/5 transition-all flex flex-col items-center gap-2 cursor-grab active:cursor-grabbing"
                     draggable
-                    onDragStart={() => onDragStart({ ...item, label: t(`iconLibrary.items.${item.translationKey}`) })}
+                    onDragStart={() => onDragStart({ 
+                      ...item, 
+                      label: item.isCustom ? item.translationKey : t(`iconLibrary.items.${item.translationKey}`) 
+                    })}
                   >
-                    <span className="text-2xl">{item.icon}</span>
-                    <span className="text-xs text-center">{t(`iconLibrary.items.${item.translationKey}`)}</span>
+                    {item.isCustom ? (
+                      item.icon.startsWith('data:image') ? (
+                        <img
+                          src={item.icon}
+                          alt={item.translationKey}
+                          className="w-8 h-8 object-contain"
+                        />
+                      ) : (
+                        <div
+                          dangerouslySetInnerHTML={{ __html: item.icon }}
+                          className="w-8 h-8"
+                        />
+                      )
+                    ) : (
+                      <span className="text-2xl">{item.icon}</span>
+                    )}
+                    <span className="text-xs text-center">
+                      {item.isCustom ? item.translationKey : t(`iconLibrary.items.${item.translationKey}`)}
+                    </span>
                   </button>
                 ))}
             </div>

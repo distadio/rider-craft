@@ -18,7 +18,8 @@
       "guitars": "Guitarras",
       "mics": "Microfones",
       "monitors": "Monitores",
-      "keys": "Teclados"
+      "keys": "Teclados",
+      "custom": "Customizados"
     },
     "items": {
       "kick": "Bumbo",
@@ -53,6 +54,36 @@
     }
   },
   "common": {
-    "newProject": "Novo Mapa de Palco"
+    "newProject": "Novo Mapa de Palco",
+    "cancel": "Cancelar",
+    "back": "Voltar"
+  },
+  "admin": {
+    "iconManager": "Gerenciador de Ícones",
+    "uploadNewIcon": "Upload Novo Ícone",
+    "iconName": "Nome do Ícone",
+    "iconNamePlaceholder": "ex: Piano de Cauda",
+    "category": "Categoria",
+    "uploadFile": "Arquivo (SVG ou PNG, máx 500KB)",
+    "fileRequirements": "SVG ou PNG, máximo 500KB",
+    "uploading": "Enviando...",
+    "customIcons": "Ícones Customizados",
+    "noCustomIcons": "Nenhum ícone customizado ainda. Faça upload do seu primeiro ícone acima.",
+    "deleteIcon": "Deletar ícone",
+    "confirmDelete": "Tem certeza que deseja deletar este ícone?",
+    "onlySvgPng": "Apenas arquivos SVG ou PNG são permitidos",
+    "fileSizeLimit": "O tamanho do arquivo deve ser menor que 500KB",
+    "iconUploaded": "Ícone enviado com sucesso!",
+    "uploadFailed": "Falha ao enviar ícone",
+    "iconDeleted": "Ícone deletado com sucesso",
+    "adminLogin": "Login Administrativo",
+    "password": "Senha",
+    "login": "Entrar",
+    "invalidPassword": "Senha inválida",
+    "loginSuccess": "Login realizado com sucesso",
+    "adminAccess": "Acesso Admin",
+    "adminPanel": "Painel Admin",
+    "closeAdmin": "Fechar Admin",
+    "logout": "Sair"
   }
 }

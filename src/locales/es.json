@@ -18,7 +18,8 @@
       "guitars": "Guitarras",
       "mics": "Micrófonos",
       "monitors": "Monitores",
-      "keys": "Teclados"
+      "keys": "Teclados",
+      "custom": "Personalizados"
     },
     "items": {
       "kick": "Bombo",
@@ -53,6 +54,36 @@
     }
   },
   "common": {
-    "newProject": "Nuevo Plano de Escenario"
+    "newProject": "Nuevo Plano de Escenario",
+    "cancel": "Cancelar",
+    "back": "Volver"
+  },
+  "admin": {
+    "iconManager": "Gestor de Iconos",
+    "uploadNewIcon": "Subir Nuevo Icono",
+    "iconName": "Nombre del Icono",
+    "iconNamePlaceholder": "ej: Piano de Cola",
+    "category": "Categoría",
+    "uploadFile": "Archivo (SVG o PNG, máx 500KB)",
+    "fileRequirements": "SVG o PNG, máximo 500KB",
+    "uploading": "Subiendo...",
+    "customIcons": "Iconos Personalizados",
+    "noCustomIcons": "Aún no hay iconos personalizados. Sube tu primer icono arriba.",
+    "deleteIcon": "Eliminar icono",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar este icono?",
+    "onlySvgPng": "Solo se permiten archivos SVG o PNG",
+    "fileSizeLimit": "El tamaño del archivo debe ser menor a 500KB",
+    "iconUploaded": "¡Icono subido con éxito!",
+    "uploadFailed": "Error al subir icono",
+    "iconDeleted": "Icono eliminado con éxito",
+    "adminLogin": "Inicio de Sesión Admin",
+    "password": "Contraseña",
+    "login": "Entrar",
+    "invalidPassword": "Contraseña inválida",
+    "loginSuccess": "Inicio de sesión exitoso",
+    "adminAccess": "Acceso Admin",
+    "adminPanel": "Panel Admin",
+    "closeAdmin": "Cerrar Admin",
+    "logout": "Salir"
   }
 }
