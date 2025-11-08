@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ZoomIn, ZoomOut, Maximize2, Settings, Plus, Minus, Copy, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ZoomIn, ZoomOut, Maximize2, Settings, Plus, Minus, Copy, Trash2, Type } from "lucide-react";
 import { useStore } from "@/store/store";
 import { StageSizeDialog } from "./StageSizeDialog";
 import {
