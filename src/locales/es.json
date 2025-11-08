@@ -9,7 +9,12 @@
     "exportRider": "Exportar Rider",
     "emptyTitle": "Arrastra elementos desde la biblioteca",
     "emptyDescription": "o haz clic en + Añadir Elemento para comenzar a construir tu plano de escenario",
-    "deleteHint": "Presiona Delete para eliminar elemento seleccionado"
+    "deleteHint": "Presiona Delete para eliminar elemento seleccionado",
+    "duplicate": "Duplicar",
+    "delete": "Eliminar",
+    "itemActions": "Acciones del Elemento",
+    "addLabel": "Insertar leyenda",
+    "labelPlaceholder": "Escriba la leyenda..."
   },
   "iconLibrary": {
     "title": "Biblioteca de Íconos",
@@ -57,7 +62,16 @@
   "common": {
     "newProject": "Nuevo Plano de Escenario",
     "cancel": "Cancelar",
-    "back": "Volver"
+    "back": "Volver",
+    "save": "Guardar"
+  },
+  "stageSize": {
+    "title": "Configurar Tamaño del Escenario",
+    "description": "Establece las dimensiones del escenario en metros. Las proporciones se mantendrán automáticamente cuando esté habilitado.",
+    "width": "Ancho",
+    "height": "Alto",
+    "keepAspectRatio": "Mantener proporción al cambiar",
+    "configure": "Configurar"
   },
   "admin": {
     "iconManager": "Gestor de Iconos",

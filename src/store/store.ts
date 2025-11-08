@@ -2,6 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { CustomIcon, StageItem, Project } from '@/types';
 
+interface StageSize {
+  width: number; // em metros
+  height: number; // em metros
+}
+
 interface AppStore {
   // Project
   project: Project;
@@ -13,6 +18,10 @@ interface AppStore {
   updateItem: (id: string, updates: Partial<StageItem>) => void;
   deleteItem: (id: string) => void;
   setStageItems: (items: StageItem[]) => void;
+  
+  // Stage Size
+  stageSize: StageSize;
+  setStageSize: (size: StageSize) => void;
   
   // Custom Icons
   customIcons: CustomIcon[];
@@ -63,6 +72,10 @@ export const useStore = create<AppStore>()(
       })),
       setStageItems: (items) => set({ stageItems: items }),
       
+      // Stage Size (valores padrão: 12m x 9m)
+      stageSize: { width: 12, height: 9 },
+      setStageSize: (size) => set({ stageSize: size }),
+      
       // Custom Icons
       customIcons: [],
       addCustomIcon: (icon) => set((state) => ({
@@ -94,7 +107,8 @@ export const useStore = create<AppStore>()(
         customIcons: state.customIcons,
         isAdmin: state.isAdmin,
         project: state.project,
-        stageItems: state.stageItems
+        stageItems: state.stageItems,
+        stageSize: state.stageSize
       })
     }
   )

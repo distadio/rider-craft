@@ -9,7 +9,12 @@
     "exportRider": "Export Rider",
     "emptyTitle": "Drag items from the library",
     "emptyDescription": "or click + Add Item to start building your stage plot",
-    "deleteHint": "Press Delete to remove selected item"
+    "deleteHint": "Press Delete to remove selected item",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "itemActions": "Item Actions",
+    "addLabel": "Add label",
+    "labelPlaceholder": "Enter label..."
   },
   "iconLibrary": {
     "title": "Icon Library",
@@ -57,7 +62,16 @@
   "common": {
     "newProject": "New Stage Plot",
     "cancel": "Cancel",
-    "back": "Back"
+    "back": "Back",
+    "save": "Save"
+  },
+  "stageSize": {
+    "title": "Configure Stage Size",
+    "description": "Set the stage dimensions in meters. Proportions will be maintained automatically when enabled.",
+    "width": "Width",
+    "height": "Height",
+    "keepAspectRatio": "Keep aspect ratio when changing",
+    "configure": "Configure"
   },
   "admin": {
     "iconManager": "Icon Manager",

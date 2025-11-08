@@ -9,7 +9,12 @@
     "exportRider": "Exportar Rider",
     "emptyTitle": "Arraste itens da biblioteca",
     "emptyDescription": "ou clique em + Adicionar Item para começar a construir seu mapa de palco",
-    "deleteHint": "Pressione Delete para remover item selecionado"
+    "deleteHint": "Pressione Delete para remover item selecionado",
+    "duplicate": "Duplicar",
+    "delete": "Excluir",
+    "itemActions": "Ações do Item",
+    "addLabel": "Inserir legenda",
+    "labelPlaceholder": "Digite a legenda..."
   },
   "iconLibrary": {
     "title": "Biblioteca de Ícones",
@@ -57,7 +62,16 @@
   "common": {
     "newProject": "Novo Mapa de Palco",
     "cancel": "Cancelar",
-    "back": "Voltar"
+    "back": "Voltar",
+    "save": "Salvar"
+  },
+  "stageSize": {
+    "title": "Configurar Tamanho do Palco",
+    "description": "Defina as dimensões do palco em metros. As proporções serão mantidas automaticamente quando habilitado.",
+    "width": "Largura",
+    "height": "Altura",
+    "keepAspectRatio": "Manter proporção ao alterar",
+    "configure": "Configurar"
   },
   "admin": {
     "iconManager": "Gerenciador de Ícones",

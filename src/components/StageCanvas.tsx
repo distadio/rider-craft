@@ -1,7 +1,15 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
+import { ZoomIn, ZoomOut, Maximize2, Settings, Plus, Minus, Copy, Trash2 } from "lucide-react";
+import { useStore } from "@/store/store";
+import { StageSizeDialog } from "./StageSizeDialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface StageItem {
   id: string;
@@ -9,7 +17,9 @@ interface StageItem {
   icon: string;
   category: string;
   position: { x: number; y: number; rotation: number };
+  size?: number; // Tamanho do ícone (padrão: 1.0)
   isCustom?: boolean;
+  showLabel?: boolean; // Controla se a legenda deve ser exibida
 }
 
 interface StageCanvasProps {
@@ -24,6 +34,19 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [draggingItemId, setDraggingItemId] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [showSizeDialog, setShowSizeDialog] = useState(false);
+  const [contextMenuOpen, setContextMenuOpen] = useState(false);
+  const [contextMenuItem, setContextMenuItem] = useState<StageItem | null>(null);
+  const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [editingLabelId, setEditingLabelId] = useState<string | null>(null);
+  const [labelText, setLabelText] = useState<string>("");
+  
+  const stageSize = useStore((state) => state.stageSize);
+  
+  // Converter metros para pixels (escala: 1 metro = 50 pixels)
+  const PIXELS_PER_METER = 50;
+  const stageWidthPx = stageSize.width * PIXELS_PER_METER;
+  const stageHeightPx = stageSize.height * PIXELS_PER_METER;
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -48,6 +71,8 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
           icon: itemData.icon,
           category: itemData.category || "custom",
           position: { x, y, rotation: 0 },
+          size: 1.0,
+          showLabel: false, // Não mostrar label por padrão
           isCustom: itemData.isCustom || false
         };
         onItemsChange([...items, newItem]);
@@ -57,8 +82,38 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
     }
   };
 
+  // Handle item click - detect double click
+  const handleItemClick = (e: React.MouseEvent, item: StageItem) => {
+    e.stopPropagation();
+    
+    // Se não clicou em um botão
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+
+    if (clickTimeout) {
+      // Double click detected
+      clearTimeout(clickTimeout);
+      setClickTimeout(null);
+      setContextMenuItem(item);
+      setContextMenuOpen(true);
+    } else {
+      // Single click - set timeout and select item
+      setSelectedItemId(item.id);
+      const timeout = setTimeout(() => {
+        setClickTimeout(null);
+      }, 300);
+      setClickTimeout(timeout);
+    }
+  };
+
   // Handle item mouse down for dragging
   const handleItemMouseDown = (e: React.MouseEvent, item: StageItem) => {
+    // Não iniciar drag se clicar nos botões de tamanho
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+
     e.stopPropagation();
     setSelectedItemId(item.id);
     setDraggingItemId(item.id);
@@ -121,12 +176,102 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
     }
   };
 
+  // Handle delete item
+  const handleDeleteItem = (itemId: string) => {
+    onItemsChange(items.filter(item => item.id !== itemId));
+    if (selectedItemId === itemId) {
+      setSelectedItemId(null);
+    }
+  };
+
+  // Handle duplicate item
+  const handleDuplicateItem = (item: StageItem) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    // Duplicar com pequeno offset
+    const offsetX = 5; // 5% offset
+    const offsetY = 5;
+    
+    const duplicatedItem: StageItem = {
+      ...item,
+      id: Date.now().toString(),
+      position: {
+        x: Math.min(100, item.position.x + offsetX),
+        y: Math.min(100, item.position.y + offsetY),
+        rotation: item.position.rotation
+      },
+      size: item.size || 1.0,
+      showLabel: item.showLabel || false
+    };
+    
+    onItemsChange([...items, duplicatedItem]);
+    setSelectedItemId(duplicatedItem.id);
+  };
+
+  // Handle size change
+  const handleSizeChange = (itemId: string, delta: number) => {
+    onItemsChange(
+      items.map((item) => {
+        if (item.id === itemId) {
+          const currentSize = item.size || 1.0;
+          const newSize = Math.max(0.3, Math.min(3.0, currentSize + delta));
+          return { ...item, size: newSize };
+        }
+        return item;
+      })
+    );
+  };
+
+  // Handle add/edit label
+  const handleAddLabel = (item: StageItem) => {
+    setEditingLabelId(item.id);
+    setLabelText(item.label);
+    setContextMenuOpen(false);
+  };
+
+  // Handle save label
+  const handleSaveLabel = (itemId: string) => {
+    onItemsChange(
+      items.map((item) => {
+        if (item.id === itemId) {
+          return { 
+            ...item, 
+            label: labelText.trim() || item.label,
+            showLabel: true 
+          };
+        }
+        return item;
+      })
+    );
+    setEditingLabelId(null);
+    setLabelText("");
+  };
+
+  // Handle cancel label editing
+  const handleCancelLabel = () => {
+    setEditingLabelId(null);
+    setLabelText("");
+  };
+
+
   return (
     <div className="flex-1 flex flex-col bg-muted/30" onKeyDown={handleKeyDown} tabIndex={0}>
       {/* Canvas Controls */}
       <div className="flex items-center justify-between px-4 py-2 bg-card border-b border-border">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">{t("canvas.stage")}: 40ft × 30ft</span>
+          <span className="text-sm text-muted-foreground">
+            {t("canvas.stage")}: {stageSize.width.toFixed(1)}m × {stageSize.height.toFixed(1)}m
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowSizeDialog(true)}
+            className="ml-2"
+          >
+            <Settings className="w-4 h-4 mr-1" />
+            {t("stageSize.configure")}
+          </Button>
         </div>
         <div className="flex items-center gap-2">
           <Button 
@@ -157,13 +302,14 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
             ref={canvasRef}
             className="stage-canvas-bg relative bg-canvas-bg border-2 border-canvas-outline rounded-sm shadow-elevated select-none"
             style={{
-              width: `${800 * (zoom / 100)}px`,
-              height: `${600 * (zoom / 100)}px`,
+              width: `${stageWidthPx * (zoom / 100)}px`,
+              height: `${stageHeightPx * (zoom / 100)}px`,
+              overflow: 'visible',
               backgroundImage: `
                 linear-gradient(hsl(var(--canvas-grid)) 1px, transparent 1px),
                 linear-gradient(90deg, hsl(var(--canvas-grid)) 1px, transparent 1px)
               `,
-              backgroundSize: `${40 * (zoom / 100)}px ${40 * (zoom / 100)}px`,
+              backgroundSize: `${(PIXELS_PER_METER / 2) * (zoom / 100)}px ${(PIXELS_PER_METER / 2) * (zoom / 100)}px`,
             }}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -176,48 +322,145 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
             {items.map((item) => {
               const isSelected = selectedItemId === item.id;
               const isDragging = draggingItemId === item.id;
+              const itemSize = item.size || 1.0;
+              const baseSize = 48; // Tamanho base em pixels
+              const iconSize = baseSize * itemSize;
               
               return (
-                <div
-                  key={item.id}
-                  className={`
-                    absolute flex flex-col items-center justify-center gap-1 p-2
-                    cursor-move transition-all rounded-lg
-                    ${isSelected ? 'ring-2 ring-accent shadow-lg scale-110' : 'hover:scale-105'}
-                    ${isDragging ? 'opacity-70 scale-110' : ''}
-                  `}
-                  style={{
-                    left: `${item.position.x}%`,
-                    top: `${item.position.y}%`,
-                    transform: `translate(-50%, -50%) rotate(${item.position.rotation}deg)`,
-                  }}
-                  onMouseDown={(e) => handleItemMouseDown(e, item)}
-                >
-                  {/* Icon Display */}
-                  <div className="w-12 h-12 flex items-center justify-center text-4xl bg-card rounded-full shadow-md border border-border">
-                    {item.isCustom ? (
-                      item.icon.startsWith('data:image') ? (
-                        <img
-                          src={item.icon}
-                          alt={item.label}
-                          className="w-8 h-8 object-contain pointer-events-none"
-                          draggable={false}
-                        />
-                      ) : (
-                        <div
-                          dangerouslySetInnerHTML={{ __html: item.icon }}
-                          className="w-8 h-8 pointer-events-none"
-                        />
-                      )
-                    ) : (
-                      <span className="pointer-events-none">{item.icon}</span>
+                <div key={item.id}>
+                  <div
+                    className={`
+                      absolute flex flex-col items-center justify-center gap-1
+                      cursor-move transition-all rounded-lg
+                      ${isSelected ? 'ring-2 ring-accent shadow-lg' : 'hover:ring-1 hover:ring-accent/50'}
+                      ${isDragging ? 'opacity-70' : ''}
+                    `}
+                    style={{
+                      left: `${item.position.x}%`,
+                      top: `${item.position.y}%`,
+                      transform: `translate(-50%, -50%) rotate(${item.position.rotation}deg)`,
+                    }}
+                    onMouseDown={(e) => handleItemMouseDown(e, item)}
+                    onClick={(e) => handleItemClick(e, item)}
+                  >
+                    {/* Size Controls - Mostrar apenas quando selecionado */}
+                    {isSelected && !isDragging && (
+                      <div 
+                        className="absolute -top-12 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-card border border-border rounded-md shadow-lg p-1 z-50 pointer-events-auto"
+                        style={{ transform: 'translate(-50%, 0)' }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-7 w-7 p-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSizeChange(item.id, -0.1);
+                          }}
+                          disabled={itemSize <= 0.3}
+                        >
+                          <Minus className="w-4 h-4" />
+                        </Button>
+                        <span className="text-xs font-medium px-2 min-w-[3rem] text-center">
+                          {Math.round(itemSize * 100)}%
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-7 w-7 p-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSizeChange(item.id, 0.1);
+                          }}
+                          disabled={itemSize >= 3.0}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
                     )}
+
+                    {/* Icon Container with scale */}
+                    <div
+                      style={{
+                        transform: `scale(${itemSize})`,
+                        transformOrigin: 'center center',
+                      }}
+                    >
+
+                      {/* Icon Display */}
+                      <div 
+                        className="flex items-center justify-center bg-card rounded-full shadow-md border border-border"
+                        style={{
+                          width: `${baseSize}px`,
+                          height: `${baseSize}px`,
+                        }}
+                      >
+                        {item.isCustom ? (
+                          item.icon.startsWith('data:image') ? (
+                            <img
+                              src={item.icon}
+                              alt={item.label}
+                              className="object-contain pointer-events-none"
+                              style={{
+                                width: `${baseSize * 0.67}px`,
+                                height: `${baseSize * 0.67}px`,
+                              }}
+                              draggable={false}
+                            />
+                          ) : (
+                            <div
+                              dangerouslySetInnerHTML={{ __html: item.icon }}
+                              className="pointer-events-none"
+                              style={{
+                                width: `${baseSize * 0.67}px`,
+                                height: `${baseSize * 0.67}px`,
+                              }}
+                            />
+                          )
+                        ) : (
+                          <span 
+                            className="pointer-events-none text-4xl"
+                            style={{
+                              fontSize: `${baseSize * 0.67}px`,
+                              lineHeight: `${baseSize * 0.67}px`,
+                            }}
+                          >
+                            {item.icon}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Label - Mostrar apenas se showLabel for true */}
+                      {item.showLabel && editingLabelId !== item.id && (
+                        <span className="text-xs font-medium text-foreground bg-card/90 px-2 py-0.5 rounded shadow-sm whitespace-nowrap pointer-events-none">
+                          {item.label}
+                        </span>
+                      )}
+                      
+                      {/* Editor de Label */}
+                      {editingLabelId === item.id && (
+                        <div className="flex items-center gap-1 mt-1" onClick={(e) => e.stopPropagation()}>
+                          <Input
+                            type="text"
+                            value={labelText}
+                            onChange={(e) => setLabelText(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleSaveLabel(item.id);
+                              } else if (e.key === 'Escape') {
+                                handleCancelLabel();
+                              }
+                            }}
+                            onBlur={() => handleSaveLabel(item.id)}
+                            className="h-7 text-xs px-2 py-1 min-w-[80px] max-w-[150px]"
+                            placeholder={t("canvas.labelPlaceholder")}
+                            autoFocus
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  
-                  {/* Label */}
-                  <span className="text-xs font-medium text-foreground bg-card/90 px-2 py-0.5 rounded shadow-sm whitespace-nowrap pointer-events-none">
-                    {item.label}
-                  </span>
                 </div>
               );
             })}
@@ -234,6 +477,57 @@ export const StageCanvas = ({ items, onItemsChange }: StageCanvasProps) => {
           </div>
         </div>
       </div>
+      
+      <StageSizeDialog open={showSizeDialog} onOpenChange={setShowSizeDialog} />
+      
+      {/* Context Menu Dialog - acionado por duplo clique */}
+      <Dialog open={contextMenuOpen} onOpenChange={setContextMenuOpen}>
+        <DialogContent className="sm:max-w-[300px]">
+          <DialogHeader>
+            <DialogTitle>{contextMenuItem?.label || t("canvas.itemActions")}</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-2 py-4">
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => {
+                if (contextMenuItem) {
+                  handleAddLabel(contextMenuItem);
+                }
+              }}
+            >
+              <Type className="w-4 h-4 mr-2" />
+              {t("canvas.addLabel")}
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => {
+                if (contextMenuItem) {
+                  handleDuplicateItem(contextMenuItem);
+                }
+                setContextMenuOpen(false);
+              }}
+            >
+              <Copy className="w-4 h-4 mr-2" />
+              {t("canvas.duplicate")}
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start text-destructive hover:text-destructive"
+              onClick={() => {
+                if (contextMenuItem) {
+                  handleDeleteItem(contextMenuItem.id);
+                }
+                setContextMenuOpen(false);
+              }}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              {t("canvas.delete")}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
